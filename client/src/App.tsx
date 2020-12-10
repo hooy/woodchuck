@@ -55,9 +55,6 @@ class App extends React.Component<IProps, WoodchuckState> {
                   ))}
                 </Layer>
               </Stage>
-                {/* <svg width="512" height="512" version="1.1" id="targetSvg">
-                  <image  href={woodchuck} x="50%" y="50%" transform="translate(-75,-75)" />
-                </svg> */}
               </div>
               <button onClick={this.disconnect}>Disconnect</button>
               {this.state.hits.map((hit: Hit) => (
