@@ -6,7 +6,7 @@ import { Woodchuck } from './Woodchuck';
 
 const App: React.FC = () => {
   {
-    const hits: Hit[] = []
+    const hits: Hit[] = [{x: 100, y: 100}]
     return (
       <div className="App">
           <header className="App-header">
