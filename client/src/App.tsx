@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Hit } from './types';
 import './App.css';
+import io from 'socket.io-client'
 import { Woodchuck } from './Woodchuck';
 
+const socket = io.connect(`http://localhost:5000`, {secure:false})
 
 const App: React.FC = () => {
+  let [hits, setHits] = useState([] as Hit[])
+  socket.on(`coords`, (hit: Hit) => {
+    console.log(hits);
+    setHits([...hits, hit])
+  });
+
   {
-    const hits: Hit[] = [{x: 100, y: 100}]
     return (
       <div className="App">
           <header className="App-header">
