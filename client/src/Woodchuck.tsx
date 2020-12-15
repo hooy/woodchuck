@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layer, Stage, Image, Circle } from 'react-konva';
 import useImage from 'use-image';
 import { Hit, WoodchuckTarget } from './types';
@@ -7,12 +7,8 @@ import { Hit, WoodchuckTarget } from './types';
     
 export function Woodchuck({ hits }: WoodchuckTarget) {
     const woodchuckPath = '/woodchuck.svg'
-    const [image, status] = useImage(woodchuckPath, 'Anonymous')
+    const [image] = useImage(woodchuckPath, 'Anonymous')
     
-    // useEffect(() => {
-    //     console.log(woodchuckPath, image, status);
-    // }, [image, status]);
-
     return (
         <div>
             <div>
