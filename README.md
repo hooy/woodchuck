@@ -23,11 +23,22 @@ $ pip install -r requirements.txt
 
 specify config file (via envrc) *or* just create environment variable that indicates where configuration file is:
 ```bash
-export WOODCHUCK_SETTINGS=/path/to/woodchuck/server.cfg
+$ export WOODCHUCK_SETTINGS=/path/to/woodchuck/server.cfg
 ```
 
 Run:
 ```bash
-python server/app.py
+$ python server/app.py
 ```
 
+
+## Client
+Install dependencies:
+```bash
+$ npm install
+```
+
+Run:
+```bash
+$ npm start
+```
