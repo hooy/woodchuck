@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, useEffect } from 'react';
 import { Layer, Stage, Image, Circle } from 'react-konva';
 import useImage from 'use-image';
 import { Hit, WoodchuckTarget } from './types';
@@ -8,9 +8,15 @@ import { Hit, WoodchuckTarget } from './types';
 export function Woodchuck({ hits }: WoodchuckTarget) {
     const woodchuckPath = '/woodchuck.svg'
     const [image] = useImage(woodchuckPath, 'Anonymous')
-    
+    const debugRef = createRef<HTMLDivElement>();
+
+    useEffect(() =>{
+        if (debugRef.current !== null) {
+            debugRef.current.scrollTo(0, 0);
+        }
+    })
     return (
-        <div>
+        <div className="Woodchuck">
             <div>
                 <Stage width={512} height={512}>
                     <Layer>
@@ -21,9 +27,10 @@ export function Woodchuck({ hits }: WoodchuckTarget) {
                     </Layer>
                 </Stage>
             </div>
-            <div>
-                {hits.map((hit: Hit, index) => (
-                    <p key={index}>x={hit.x} y={hit.y} {index} </p>
+            <div className="Woodchuck-debug" ref={debugRef}>
+                <h5>Coords:</h5>
+                {hits.slice(0).reverse().map((hit: Hit, index) => (
+                    <p key={index}>x={hit.x}, y={hit.y}</p>
                 ))}
             </div>
         </div>

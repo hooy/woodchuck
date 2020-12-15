@@ -9,7 +9,11 @@ const socket = io.connect(`http://localhost:5000`, {secure:false})
 const App: React.FC = () => {
   const [hits, setHits] = useState([] as Hit[])
   const hitsRef = React.useRef(hits)
-    
+  
+  const disconnect = () => {
+      socket.disconnect(); 
+  };
+
   useEffect(() => {
       // This effect executes on every render (no dependency array specified).
       // Any change to the "hits" state will trigger a re-render
@@ -30,9 +34,7 @@ const App: React.FC = () => {
     const handler = (hit: Hit) => {setHits([...hitsRef.current, hit])};
     socket.on('coords', handler);
 
-    return () => {
-      socket.off('disconnect');
-    }
+    return disconnect
   }, []);
 
   
@@ -43,6 +45,7 @@ const App: React.FC = () => {
             <h1 className="App-title">Woodchuck</h1>
         </header>
         <div className="App-content">
+            <button onClick={disconnect}>Disconnect</button>
             <div className="Woodchuck">
               <Woodchuck hits={hits}/>
             </div>
