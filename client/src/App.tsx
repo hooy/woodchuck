@@ -29,8 +29,9 @@ const App: React.FC = () => {
     // "hits" (due to the other effect updating the ref).
     const handler = (hit: Hit) => {setHits([...hitsRef.current, hit])};
     socket.on('coords', handler);
+
     return () => {
-      socket.off('disconnect', handler);
+      socket.off('disconnect');
     }
   }, []);
 
