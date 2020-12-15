@@ -37,11 +37,17 @@ def random_hit_generator():
 
 
 def random_delay():
-    socketio.sleep(randint(app.config.get("HIT_DELAY_RANGE_FROM"), app.config.get("HIT_DELAY_RANGE_TO")))
+    socketio.sleep(
+        randint(
+            app.config.get("HIT_DELAY_RANGE_FROM"), app.config.get("HIT_DELAY_RANGE_TO")
+        )
+    )
 
 
 def get_random_coordinate():
-    return randint(app.config.get("COORDINATE_RANGE_FROM"), app.config.get("COORDINATE_RANGE_TO"))
+    return randint(
+        app.config.get("COORDINATE_RANGE_FROM"), app.config.get("COORDINATE_RANGE_TO")
+    )
 
 
 @socketio.on("connect")

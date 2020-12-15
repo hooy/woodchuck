@@ -1,71 +1,54 @@
-import React, { useState, useEffect, useRef } from 'react';
-import io from "socket.io-client"
-import woodchuck from './woodchuck.svg'
-import { Hit, WoodchuckState } from './types';
-import { Stage, Layer, Image, Circle} from 'react-konva';
-import useImage from 'use-image';
+import React, { useEffect, useState } from 'react';
+import { Hit } from './types';
 import './App.css';
+import io from 'socket.io-client'
+import { Woodchuck } from './Woodchuck';
 
-let socket = io.connect(`http://localhost:5000`, {secure:false})
-interface IProps {}
-const WoodchuckImage = () => {
-  const [image] = useImage(woodchuck);
-  return <Image image={image} x={192} y={192} />;
-};
+const socket = io.connect(`http://localhost:5000`, {secure:false})
 
-class App extends React.Component<IProps, WoodchuckState> {
-  targetCanvasRef: React.RefObject<HTMLCanvasElement>;
+const App: React.FC = () => {
+  const [hits, setHits] = useState([] as Hit[])
+  const hitsRef = React.useRef(hits)
+    
+  useEffect(() => {
+      // This effect executes on every render (no dependency array specified).
+      // Any change to the "hits" state will trigger a re-render
+      // which will then cause this effect to capture the current "hits"
+      // value in "hitsRef.current".
+      hitsRef.current = hits;
+  });
+
+  React.useEffect(() => {
+    // This effect only executes on the initial render so that we aren't setting
+    // up the socket repeatedly. This means it can't reliably refer to "hits"
+    // because once "setHits" is called this would be looking at a stale
+    // "hits" reference (it would forever see the initial value of the
+    // "hits" state since it isn't in the dependency array).
+    // "hitsRef", on the other hand, will be stable across re-renders and 
+    // "hitsRef.current" successfully provides the up-to-date value of 
+    // "hits" (due to the other effect updating the ref).
+    const handler = (hit: Hit) => {setHits([...hitsRef.current, hit])};
+    socket.on('coords', handler);
+
+    return () => {
+      socket.off('disconnect');
+    }
+  }, []);
+
   
-  constructor(props: IProps) {
-    super(props);
-    
-    this.targetCanvasRef = React.createRef<HTMLCanvasElement>();
-    this.state = {
-      hits: [{x: 1, y: 1}]
-    };
-  }
 
-  componentDidMount() {    
-    socket.on(`coords`, (h: Hit) => {
-      console.log(h)
-      this.setState((previousState: { hits: Hit[]; }, hit: Hit) => ({
-        hits: [...previousState.hits, h]
-      }));
-    })
-  }
-
-  disconnect() {
-    socket.disconnect()
-  }
-
-  render () {
-    
-    return (
-      <div className="App">
-          <header className="App-header">
-              <h1 className="App-title">Woodchuck</h1>
-          </header>
-          <div className="App-content">
-              <div className="Woodchuck">
-              <Stage width={512} height={512}>
-                <Layer>
-                  <WoodchuckImage />
-                  {this.state.hits.map((hit: Hit) => (
-                    <Circle x={hit.x} y={hit.y} radius={5} fill="green" />
-                  ))}
-                </Layer>
-              </Stage>
-              </div>
-              <button onClick={this.disconnect}>Disconnect</button>
-              {this.state.hits.map((hit: Hit) => (
-                <div>{hit.x}, y={hit.y}</div>
-              ))}
-          </div>
-              
-      
-      </div>
-    )
-  }
-}
+  return (
+    <div className="App">
+        <header className="App-header">
+            <h1 className="App-title">Woodchuck</h1>
+        </header>
+        <div className="App-content">
+            <div className="Woodchuck">
+              <Woodchuck hits={hits}/>
+            </div>
+        </div>
+    </div>
+  );
+};
 
 export default App;

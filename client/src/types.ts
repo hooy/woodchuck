@@ -3,6 +3,6 @@ export interface Hit {
     y: number
 }
 
-export interface WoodchuckState {
+export interface WoodchuckTarget {
     hits: Hit[];
 }
