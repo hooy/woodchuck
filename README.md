@@ -2,8 +2,17 @@
 Flask + SocketIO + React examle app
 
 # Installation
+## Docker
+simply run in root directory of the project
+```bash
+docker-compose up
+```
+:exclamation: Note: 3000 (React) and 5000 (Flask) ports must be free
 
-## Server
+## Manual
+If for some reason you don't want to use docker, or docker is not available in your system, project can be set up manually, follow server and client sections.
+
+### Server
 
 Good idea is to use virtual environments for python, you need python3 on your system
 
@@ -16,7 +25,7 @@ Activate it (now all dependencies will be installed on that env only)
 $ source venv/bin/activate
 ```
 
-install requirements via pip:
+install requirements (from server directory) via pip:
 ```bash
 $ pip install -r requirements.txt
 ```
