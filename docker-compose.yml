@@ -1,6 +1,38 @@
-version: "3.9"
+version: "3.8"
 services:
-  web:
-    build: docker/Flask
+  backend:
+    build:
+      context: ./server
+    command: gunicorn --bind 0.0.0.0:5000 app:app
+    volumes:
+      - appdata:/var/www/
     ports:
-      - "4000:4000"
+      - "5000:5000"
+    environment:
+      WOODCHUCK_SETTINGS: /app/server.cfg
+    networks:
+      - frontend
+      - backend
+    
+  frontend:
+    build:
+      context: ./client
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend
+      - backend
+
+  
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  appdata:
+    driver: local
